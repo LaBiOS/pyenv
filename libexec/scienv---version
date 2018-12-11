@@ -10,11 +10,11 @@
 # tagged.
 
 set -e
-[ -n "$ANYENV_DEBUG" ] && set -x
+[ -n "$SCIENV_DEBUG" ] && set -x
 
 version=""
 
-if cd "$ANYENV_ROOT" 2>/dev/null; then
+if cd "$SCIENV_ROOT" 2>/dev/null; then
   git_revision="$(git describe --tags HEAD 2>/dev/null || true)"
   git_revision="${git_revision#v}"
 fi

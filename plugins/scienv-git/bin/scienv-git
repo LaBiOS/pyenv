@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Summary: Run `git` in directories of all **env and all installed plugins.
+#
+# Usage: scienv git <any-git-sub-commands>...
+#
+# Example: scienv git pull
+#          scienv git gc
+
+set -euo pipefail
+[ -n "${SCIENV_DEBUG-}" ] && set -x
+
+scienv_git () {
+  if [ -d .git ]; then
+    echo "Run git in '$1'..."
+    shift
+    git "$@"
+  else
+    echo "Skip '$1'"
+  fi
+  echo
+}
+
+scienv_git_plugins () {
+  shopt -s nullglob
+  for plugin in plugins/*; do
+    pushd "$plugin" >/dev/null
+    scienv_git "$(basename "$plugin")" "$@"
+    popd >/dev/null
+  done
+  shopt -u nullglob
+}
+
+cd "${SCIENV_ROOT:-$(scienv root)}"
+scienv_git scienv "$@"
+scienv_git_plugins "$@"
+
+for env in $(scienv envs); do
+  ENV_ROOT_VALUE=$(echo "${env}_ROOT" | tr "[:lower:]" "[:upper:]")
+  eval cd "\${${ENV_ROOT_VALUE}:-\$($env root)}"
+  scienv_git "$env" "$@"
+  scienv_git_plugins "$@"
+done

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Summary: List all Any versions available to **env
+# Summary: List all Env versions available to **env
 # Usage: scienv versions
 #
-# Lists all Any versions found in `$ANYENV_ROOT/envs/*'.
+# Lists all Env versions found in `$SCIENV_ROOT/envs/*'.
 
 set -e
-[ -n "$ANYENV_DEBUG" ] && set -x
+[ -n "$SCIENV_DEBUG" ] && set -x
 
 for env in $(scienv-envs); do
   echo "$env:"

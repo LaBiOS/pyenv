@@ -3,11 +3,11 @@ set -e
 export -n CDPATH
 
 if [ "$1" = "--debug" ]; then
-  export ANYENV_DEBUG=1
+  export SCIENV_DEBUG=1
   shift
 fi
 
-if [ -n "$ANYENV_DEBUG" ]; then
+if [ -n "$SCIENV_DEBUG" ]; then
   export PS4='+ [${BASH_SOURCE##*/}:${LINENO}] '
   set -x
 fi
@@ -36,39 +36,39 @@ abs_dirname() {
   cd "$cwd"
 }
 
-if [ -z "${ANYENV_ROOT}" ]; then
-  ANYENV_ROOT="${HOME}/.scienv"
+if [ -z "${SCIENV_ROOT}" ]; then
+  SCIENV_ROOT="${HOME}/.scienv"
 else
-  ANYENV_ROOT="${ANYENV_ROOT%/}"
+  SCIENV_ROOT="${SCIENV_ROOT%/}"
 fi
-export ANYENV_ROOT
+export SCIENV_ROOT
 
-if [ -z "${ANYENV_DIR}" ]; then
-  ANYENV_DIR="$(pwd)"
+if [ -z "${SCIENV_DIR}" ]; then
+  SCIENV_DIR="$(pwd)"
 else
-  cd "$ANYENV_DIR" 2>/dev/null || {
-    echo "scienv: cannot change working directory to \`$ANYENV_DIR'"
+  cd "$SCIENV_DIR" 2>/dev/null || {
+    echo "scienv: cannot change working directory to \`$SCIENV_DIR'"
     exit 1
   } >&2
-  ANYENV_DIR="$(pwd)"
+  SCIENV_DIR="$(pwd)"
   cd "$OLDPWD"
 fi
-export ANYENV_DIR
+export SCIENV_DIR
 
 
 shopt -s nullglob
 
 bin_path="$(abs_dirname "$0")"
-for plugin_bin in "${ANYENV_ROOT}/plugins/"*/bin; do
+for plugin_bin in "${SCIENV_ROOT}/plugins/"*/bin; do
   bin_path="${bin_path}:${plugin_bin}"
 done
 export PATH="${bin_path}:${PATH}"
 
-hook_path="${ANYENV_HOOK_PATH}:${ANYENV_ROOT}/scienv.d:/usr/local/etc/scienv.d:/etc/scienv.d:/usr/lib/scienv/hooks"
-for plugin_hook in "${ANYENV_ROOT}/plugins/"*/etc/scienv.d; do
+hook_path="${SCIENV_HOOK_PATH}:${SCIENV_ROOT}/scienv.d:/usr/local/etc/scienv.d:/etc/scienv.d:/usr/lib/scienv/hooks"
+for plugin_hook in "${SCIENV_ROOT}/plugins/"*/etc/scienv.d; do
   hook_path="${hook_path}:${plugin_hook}"
 done
-export ANYENV_HOOK_PATH="$hook_path"
+export SCIENV_HOOK_PATH="$hook_path"
 
 shopt -u nullglob
 

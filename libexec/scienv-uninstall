@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Summary: Uninstall a specific **anv
+# Summary: Uninstall a specific **env
 #
 # Usage: scienv uninstall [-f|--force] <**env>
 #
@@ -61,7 +61,7 @@ esac
 
 
 ENV_NAME="${DEFINITION##*/}"
-PREFIX="${ANYENV_ROOT}/envs/${ENV_NAME}"
+PREFIX="${SCIENV_ROOT}/envs/${ENV_NAME}"
 
 if [ -z "$FORCE" ]; then
   if [ ! -d "$PREFIX" ]; then

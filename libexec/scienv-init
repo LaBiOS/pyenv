@@ -3,7 +3,7 @@
 # Usage: eval "$(scienv init - [<shell>])"
 
 set -e
-[ -n "$ANYENV_DEBUG" ] && set -x
+[ -n "$SCIENV_DEBUG" ] && set -x
 
 print=""
 no_rehash_arg=""
@@ -87,7 +87,7 @@ if [ -z "$print" ]; then
   exit 1
 fi
 
-mkdir -p "${ANYENV_ROOT}/envs"
+mkdir -p "${SCIENV_ROOT}/envs"
 
 case "$shell" in
 bash | zsh | fish )
@@ -122,7 +122,7 @@ esac
 
 for env in $(scienv-envs); do
   ENV_ROOT_VALUE=$(echo ${env}_ROOT | tr "[a-z]" "[A-Z]")
-  ENV_ROOT="${ANYENV_ROOT}/envs/${env}"
+  ENV_ROOT="${SCIENV_ROOT}/envs/${env}"
 
   case "$shell" in
   fish )

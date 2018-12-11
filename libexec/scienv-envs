@@ -2,12 +2,12 @@
 # Summary: List all **envs available to scienv
 # Usage: scienv envs
 #
-# Lists all **env versions found in `$ANYENV_ROOT/envs/*'.
+# Lists all **env versions found in `$SCIENV_ROOT/envs/*'.
 
 set -e
-[ -n "$ANYENV_DEBUG" ] && set -x
+[ -n "$SCIENV_DEBUG" ] && set -x
 
-for path in "${ANYENV_ROOT}/envs/"*; do
+for path in "${SCIENV_ROOT}/envs/"*; do
   if [ -d "$path" ]; then
     echo "${path##*/}"
   fi

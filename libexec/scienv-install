@@ -10,10 +10,10 @@
 #   -s/--skip-existing Skip if the version appears to be installed already
 #
 set -e
-[ -n "$ANYENV_DEBUG" ] && set -x
+[ -n "$SCIENV_DEBUG" ] && set -x
 
 list_definitions() {
-  { for definition in "${ANYENV_ROOT}/share/scienv-install/"*; do
+  { for definition in "${SCIENV_ROOT}/share/scienv-install/"*; do
       echo "${definition##*/}"
     done
   } | sort
@@ -25,6 +25,7 @@ install_env() {
   local git_ref="$2"
 
   mkdir -p "$BUILD_DIR"
+  mkdir -p "$PREFIX/${ENV_NAME}"
   pushd "$BUILD_DIR"
   fetch_git "${package_name}" "${git_url}" "${git_ref}"
   popd
@@ -115,8 +116,8 @@ if [ "$1" = "--complete" ]; then
   exit 0
 fi
 
-if [ -z "$ANYENV_ROOT" ]; then
-  ANYENV_ROOT="${HOME}/.scienv"
+if [ -z "$SCIENV_ROOT" ]; then
+  SCIENV_ROOT="${HOME}/.scienv"
 fi
 
 parse_options "$@"
@@ -146,7 +147,7 @@ for option in "${OPTIONS[@]}"; do
 done
 
 unset ENV_NAME
-ANYENV_ENVS_ROOT="${ANYENV_ROOT}/envs"
+SCIENV_ENVS_ROOT="${SCIENV_ROOT}/envs"
 
 # The first argument contains the definition to install.
 # Show usage instructions if the definition is not specified.
@@ -156,12 +157,12 @@ DEFINITION="${ARGUMENTS[0]}"
 # Set ENV_NAME from $DEFINITION, if it is not already set. Then
 # compute the installation prefix.
 [ -n "$ENV_NAME" ] || ENV_NAME="${DEFINITION##*/}"
-PREFIX="${ANYENV_ENVS_ROOT}/${ENV_NAME}"
+PREFIX="${SCIENV_ENVS_ROOT}/${ENV_NAME}"
 
 [ -d "${PREFIX}" ] && PREFIX_EXISTS=1
 
 
-BUILTIN_DEFINITION_PATH="${ANYENV_ROOT}/share/scienv-install/${DEFINITION}"
+BUILTIN_DEFINITION_PATH="${SCIENV_ROOT}/share/scienv-install/${DEFINITION}"
 if [ -e "$BUILTIN_DEFINITION_PATH" ]; then
   DEFINITION_PATH="$BUILTIN_DEFINITION_PATH"
 else
@@ -212,7 +213,7 @@ source "$DEFINITION_PATH" || STATUS="$?"
 if [ "$STATUS" == "0" ]; then
   echo ""
   echo "Install $ENV_NAME succeeded!"
-  echo "Please reload your profile (exec \$SHELL -l) or open a new session."
+  echo "Please reload your profile (exec \$SHELL -l), your .bashrc (source \$HOME/.bashrc) or open a new session."
 else
   echo "Install $ENV_NAME failed"
   cleanup

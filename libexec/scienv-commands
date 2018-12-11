@@ -3,7 +3,7 @@
 # Usage: scienv commands [--sh|--no-sh]
 
 set -e
-[ -n "$ANYENV_DEBUG" ] && set -x
+[ -n "$SCIENV_DEBUG" ] && set -x
 
 # Provide scienv completions
 if [ "$1" = "--complete" ]; then
